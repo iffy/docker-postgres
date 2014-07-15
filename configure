@@ -1,0 +1,10 @@
+#!/bin/bash
+
+DATADIR=/var/lib/postgresql/9.3/main
+BINDIR=/usr/lib/postgresql/9.3/bin
+CONFIG=/etc/postgresql/9.3/main/postgresql.conf
+
+echo "Initializing postgres database"
+su postgres sh -c "$BINDIR/initdb $DATADIR"
+su postgres sh -c "$BINDIR/postgres --single -c config_file=$CONFIG" <<< "CREATE USER docker WITH SUPERUSER PASSWORD 'docker'"
+su postgres sh -c "$BINDIR/postgres --single -c config_file=$CONFIG" <<< "CREATE DATABASE docker OWNER docker"
